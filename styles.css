@@ -1,0 +1,40 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #eeeeee;
+  font-family: 'JetBrains Mono', monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+h1,
+h2,
+h3 {
+  color: #222831;
+  font-weight: 700;
+}
+
+p {
+  color: #393e46;
+  font-weight: 400;
+}
+
+.foreground {
+  color: #00adb5;
+}
+
+.container {
+  width: 100%;
+  padding: 8px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
