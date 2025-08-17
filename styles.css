@@ -30,11 +30,206 @@ p {
 .container {
   width: 100%;
   padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.title {
+.head-title {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  flex-direction: column;
+  gap: 4px;
+  margin: 10px auto 20px auto;
+  padding: 0 16px; /* Padding horizontal untuk layar kecil */
+}
+
+.head-title > h1,
+h2 {
+  margin: 0;
+}
+
+/* Penyesuaian ukuran font untuk layar lebih kecil */
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px; /* Padding horizontal untuk layar kecil */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-form > button {
+  align-self: center;
+  height: 45px;
+  width: 100%;
+  max-width: 175px;
+  padding: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #00adb5;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+#title-input {
+  height: 30px;
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  border: 0;
+  border-bottom: 2px solid #222831;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+  font-family: 'JetBrains Mono', monospace;
+  width: 100%;
+  box-sizing: border-box; /* Tambahan untuk konsistensi */
+}
+
+#title-input:hover {
+  background-color: #00adb5;
+  border: 0;
+  border-bottom: 2px solid #222831;
+}
+
+#title-input:focus {
+  background-color: #00adb5;
+  outline: none;
+  border: 0;
+  border-bottom: 2px solid #222831;
+}
+
+#body-input {
+  height: 100px;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 2px solid #222831;
+  background-color: transparent;
+  margin-bottom: 10px;
+  transition: all 0.2s ease-in-out;
+  width: 100%; /* Memastikan textarea mengisi form */
+  box-sizing: border-box; /* Tambahan untuk konsistensi */
+  resize: vertical; /* Memungkinkan pengguna mengubah ukuran tinggi textarea */
+}
+
+#body-input:hover {
+  background-color: #00adb5;
+}
+
+#body-input:focus {
+  background-color: #00adb5;
+  border-radius: 0;
+  outline: 0;
+}
+
+.input-form > button:hover {
+  background-color: #393e46;
+  color: #00adb5;
+}
+
+.notes-container {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.notes-container > h2 {
+  margin-bottom: 20px;
+}
+
+.notes-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.notes-button {
+  background-color: transparent;
+  height: 30px;
+  border-radius: 30px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 5px;
+}
+
+.notes-button:hover {
+  background-color: #00adb5;
+}
+/* --- Media Queries untuk Responsivitas --- */
+
+/* Untuk Tablet (lebar 600px ke atas) */
+@media (min-width: 600px) {
+  .input-form {
+    max-width: 500px; /* Sedikit lebih lebar di tablet */
+  }
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  h2 {
+    font-size: 1.5em;
+  }
+}
+
+/* Untuk Desktop (lebar 992px ke atas) */
+@media (min-width: 992px) {
+  .head-title {
+    margin: 20px auto 40px auto; /* Margin lebih besar di desktop */
+  }
+
+  .input-form {
+    max-width: 600px; /* Lebih lebar lagi di desktop */
+  }
+
+  h1 {
+    font-size: 3em; /* Ukuran judul lebih besar */
+  }
+
+  h2 {
+    font-size: 1.75em;
+  }
+}
+
+/* Penyesuaian untuk layar sangat kecil (di bawah 320px) */
+@media (max-width: 320px) {
+  h1 {
+    font-size: 1.8em;
+  }
+
+  h2 {
+    font-size: 1em;
+  }
+
+  .head-title {
+    padding: 0 8px;
+  }
+
+  .form-container {
+    padding: 0 8px;
+  }
 }
