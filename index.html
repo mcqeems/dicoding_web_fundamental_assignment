@@ -41,10 +41,10 @@
         <div class="container form-container">
           <form class="input-form">
             <label for="title-input">Judul: </label>
-            <input type="text" id="title-input" name="title-input" />
+            <input type="text" id="title-input" name="title-input" required minlength="4" />
             <label for="body-input">Catatan: </label>
-            <textarea id="body-input" name="body-input"></textarea>
-            <button type="submit">Tambah catatan</button>
+            <textarea id="body-input" name="body-input" required minlength="4"></textarea>
+            <button type="submit" id="add-note-btn">Tambah catatan</button>
           </form>
         </div>
         <notes-list></notes-list>

@@ -1,8 +1,20 @@
 import './notes-list.js';
+import './notes.js';
+import notesData from './notes.js';
 
 const selectAddNoteButton = document.querySelector('#notes-button');
+const selectTitleValue = document.querySelector('#title-input');
+const selectBodyValue = document.querySelector('#body-input');
+const selectAddNoteBtn = document.querySelector('#add-note-btn');
 
 let isFormOpen = false;
+
+function generateRandomSixDigitNumber() {
+  const min = 100000;
+  const max = 999999;
+
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function addNoteButton() {
   const selectNotesButton = document.querySelector('.notes-button');
@@ -48,5 +60,35 @@ function handleNoteButtonClick() {
     isFormOpen = true;
   }
 }
+
+function handleNoteAdd() {
+  const idValue = `notes-${generateRandomSixDigitNumber()}`;
+  const titleValue = selectTitleValue.value;
+  const bodyValue = selectBodyValue.value;
+  const createdAtValue = new Date().toISOString();
+  const archiveValue = false;
+
+  const newNote = `
+	{
+    id: ${idValue},
+    title: ${titleValue},
+    body: ${bodyValue},
+    createdAt: ${createdAtValue},
+    archived: ${archiveValue},
+  }`;
+
+  notesData.unshift(newNote);
+
+  selectTitleValue.value = '';
+  selectBodyValue.value = '';
+
+  closeNoteButton();
+}
+
+selectAddNoteBtn.addEventListener('submit', function (event) {
+  event.preventDefault();
+
+  event.handleNoteAdd();
+});
 
 selectAddNoteButton.addEventListener('click', handleNoteButtonClick);
