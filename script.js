@@ -1,18 +1,17 @@
 import './notes-list.js';
-import './notes.js';
 import notesData from './notes.js';
 
 const selectAddNoteButton = document.querySelector('#notes-button');
 const selectTitleValue = document.querySelector('#title-input');
 const selectBodyValue = document.querySelector('#body-input');
-const selectAddNoteBtn = document.querySelector('#add-note-btn');
+const notesList = document.querySelector('notes-list');
+const selectForm = document.querySelector('.input-form');
 
 let isFormOpen = false;
 
 function generateRandomSixDigitNumber() {
   const min = 100000;
   const max = 999999;
-
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -27,7 +26,7 @@ function addNoteButton() {
 	c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55
 	c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505
 	c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55
-	l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719
+	l171.117-171.12l171.118,171.12c2.913,2.911,6.866-4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719
 	c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"/>
 </svg>`;
 }
@@ -52,43 +51,34 @@ function closeNoteButton() {
 }
 
 function handleNoteButtonClick() {
+  isFormOpen = !isFormOpen;
   if (isFormOpen) {
-    closeNoteButton();
-    isFormOpen = false;
-  } else {
     addNoteButton();
-    isFormOpen = true;
+  } else {
+    closeNoteButton();
   }
 }
 
-function handleNoteAdd() {
-  const idValue = `notes-${generateRandomSixDigitNumber()}`;
-  const titleValue = selectTitleValue.value;
-  const bodyValue = selectBodyValue.value;
-  const createdAtValue = new Date().toISOString();
-  const archiveValue = false;
+function handleNoteAdd(event) {
+  event.preventDefault();
 
-  const newNote = `
-	{
-    id: ${idValue},
-    title: ${titleValue},
-    body: ${bodyValue},
-    createdAt: ${createdAtValue},
-    archived: ${archiveValue},
-  }`;
+  const newNote = {
+    id: `notes-${generateRandomSixDigitNumber()}`,
+    title: selectTitleValue.value,
+    body: selectBodyValue.value,
+    createdAt: new Date().toISOString(),
+    archived: false,
+  };
 
   notesData.unshift(newNote);
+  notesList.render();
 
   selectTitleValue.value = '';
   selectBodyValue.value = '';
 
   closeNoteButton();
+  isFormOpen = false;
 }
 
-selectAddNoteBtn.addEventListener('submit', function (event) {
-  event.preventDefault();
-
-  event.handleNoteAdd();
-});
-
+selectForm.addEventListener('submit', handleNoteAdd);
 selectAddNoteButton.addEventListener('click', handleNoteButtonClick);
