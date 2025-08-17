@@ -13,43 +13,30 @@
     <title>Notes App</title>
   </head>
   <body>
-    <div class="container head-title">
-      <h1>Notes.io</h1>
-      <h2>Write everything</h2>
-    </div>
+    <app-bar title="Notes.io" subtitle="Write everything"></app-bar>
 
-    <div class="container">
+    <main class="container">
       <div class="notes-container">
         <div class="notes-title">
-          <h2>Catatan anda:</h2>
-          <div class="notes-button" id="notes-button">
+          <h2>Catatan Anda:</h2>
+          <button class="notes-button" id="notes-button" aria-label="Toggle Add Note Form">
             <svg width="30px" height="30px" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none">
-              <g stroke="#222831" stroke-linecap="round" stroke-linejoin="round" stroke-width="12" clip-path="url(#a)">
+              <g stroke="#222831" stroke-linecap="round" stroke-linejoin="round" stroke-width="12">
                 <path
                   d="M55 139.591 61.173 171l26.432-17.816L136 35.594 103.394 22 55 139.591ZM22 42h72m40 0h36M22 78h57m41 0h50M22 114h41m41 0h66M22 150h34m34 0h32"
                 />
               </g>
-
-              <defs>
-                <clipPath id="a">
-                  <path fill="#ffffff" d="M0 0h192v192H0z" />
-                </clipPath>
-              </defs>
             </svg>
-          </div>
+          </button>
         </div>
-        <div class="container form-container">
-          <form class="input-form">
-            <label for="title-input">Judul: </label>
-            <input type="text" id="title-input" name="title-input" required minlength="4" />
-            <label for="body-input">Catatan: </label>
-            <textarea id="body-input" name="body-input" required minlength="4"></textarea>
-            <button type="submit" id="add-note-btn">Tambah catatan</button>
-          </form>
-        </div>
+        <note-form style="display: none"></note-form>
         <notes-list></notes-list>
       </div>
-    </div>
+    </main>
+
+    <script src="./components/app-bar.js"></script>
+    <script src="./components/note-form.js"></script>
+    <script src="./components/notes-list.js" type="module"></script>
     <script src="./script.js" type="module"></script>
   </body>
 </html>
