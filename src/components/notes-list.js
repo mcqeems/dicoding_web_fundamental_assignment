@@ -1,9 +1,10 @@
-import { renderNotes } from '../index.js';
+import { renderNotes } from "../index.js";
+import { animate, scroll } from "motion";
 
 class NotesList extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
     this._notes = [];
     this._isLoading = false;
   }
@@ -93,24 +94,24 @@ class NotesList extends HTMLElement {
         }
       </style>
     `;
-    const baseUrl = 'https://notes-api.dicoding.dev/v2/';
-    const container = document.createElement('div');
-    container.classList.add('notes-list-container-grid');
+    const baseUrl = "https://notes-api.dicoding.dev/v2/";
+    const container = document.createElement("div");
+    container.classList.add("notes-list-container-grid");
 
     if (this._isLoading) {
-      container.innerHTML = '<loading-spinner></loading-spinner>';
+      container.innerHTML = "<loading-spinner></loading-spinner>";
     } else if (this._notes.length > 0) {
       this._notes.forEach((note) => {
-        const noteElement = document.createElement('div');
-        noteElement.classList.add('notes-list-card');
+        const noteElement = document.createElement("div");
+        noteElement.classList.add("notes-list-card");
         noteElement.id = note.id;
 
         const formattedDate = new Date(note.createdAt).toLocaleDateString(
-          'id-ID',
+          "id-ID",
           {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
           }
         );
 
@@ -126,21 +127,21 @@ class NotesList extends HTMLElement {
           <h3>${note.title}</h3>
           <p>${note.body}</p>
           <div class="card-footer">
-            ${note.archived ? `<p class="archived-info"><b>Archived</b></p>` : ''}
+            ${note.archived ? `<p class="archived-info"><b>Archived</b></p>` : ""}
             <p class="datetime">${formattedDate}</p>
           </div>         
         `;
 
         // ---- Handlers ----
 
-        const deleteButton = noteElement.querySelector('.delete');
-        const archiveButton = noteElement.querySelector('.archive');
-        const unarchiveButton = noteElement.querySelector('.unarchive');
+        const deleteButton = noteElement.querySelector(".delete");
+        const archiveButton = noteElement.querySelector(".archive");
+        const unarchiveButton = noteElement.querySelector(".unarchive");
 
         if (archiveButton) {
-          archiveButton.addEventListener('click', async () => {
+          archiveButton.addEventListener("click", async () => {
             try {
-              const options = { method: 'POST' };
+              const options = { method: "POST" };
               const response = await fetch(
                 `${baseUrl}notes/${note.id}/archive`,
                 options
@@ -148,20 +149,20 @@ class NotesList extends HTMLElement {
               const responseJson = await response.json();
 
               console.log(responseJson.message);
-              alert('Catatan berhasil diarsip!');
+              alert("Catatan berhasil diarsip!");
 
               renderNotes();
             } catch (error) {
-              console.error('Gagal menyimpan catatan:', error);
-              alert('Gagal mengarsip catatan.');
+              console.error("Gagal menyimpan catatan:", error);
+              alert("Gagal mengarsip catatan.");
             }
           });
         }
 
         if (unarchiveButton) {
-          unarchiveButton.addEventListener('click', async () => {
+          unarchiveButton.addEventListener("click", async () => {
             try {
-              const options = { method: 'POST' };
+              const options = { method: "POST" };
               const response = await fetch(
                 `${baseUrl}notes/${note.id}/unarchive`,
                 options
@@ -169,29 +170,29 @@ class NotesList extends HTMLElement {
               const responseJson = await response.json();
 
               console.log(responseJson.message);
-              alert('Catatan berhasil dilepas dari arsip!');
+              alert("Catatan berhasil dilepas dari arsip!");
 
               renderNotes();
             } catch (error) {
-              console.error('Gagal:', error);
-              alert('Gagal');
+              console.error("Gagal:", error);
+              alert("Gagal");
             }
           });
         }
 
-        deleteButton.addEventListener('click', async () => {
+        deleteButton.addEventListener("click", async () => {
           try {
-            const options = { method: 'DELETE' };
+            const options = { method: "DELETE" };
             const response = await fetch(`${baseUrl}notes/${note.id}`, options);
             const responseJson = await response.json();
 
             console.log(responseJson.message);
-            alert('Catatan berhasil dihapus!');
+            alert("Catatan berhasil dihapus!");
 
             renderNotes();
           } catch (error) {
-            console.error('Gagal menghapus catatan:', error);
-            alert('Gagal menghapus catatan.');
+            console.error("Gagal menghapus catatan:", error);
+            alert("Gagal menghapus catatan.");
           }
         });
 
@@ -205,6 +206,22 @@ class NotesList extends HTMLElement {
       `;
     }
     this.shadowRoot.appendChild(container);
+
+    const notesCards = this.shadowRoot.querySelectorAll(".notes-list-card");
+
+    if (notesCards.length > 0) {
+      animate(
+        notesCards,
+        {
+          opacity: [0, 1],
+          y: [-20, 0],
+        },
+        {
+          delay: (i) => i * 0.1,
+          duration: 0.5,
+        }
+      );
+    }
   }
 }
-customElements.define('notes-list', NotesList);
+customElements.define("notes-list", NotesList);
