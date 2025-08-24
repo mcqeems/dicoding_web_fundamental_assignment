@@ -101,6 +101,14 @@ class NoteForm extends HTMLElement {
             font-size: 0.8em;
             min-height: 1em;
         }
+
+        .archived-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          margin-bottom: 10px;
+        }
       </style>
       <div class="form-container">
         <form class="input-form" novalidate>
@@ -112,6 +120,8 @@ class NoteForm extends HTMLElement {
           <textarea id="body-input" name="body-input" required minlength="4"></textarea>
           <span class="error-message" id="body-error" aria-live="polite"></span>
           
+      
+
           <button type="submit" id="add-note-btn">Tambah Catatan</button>
         </form>
       </div>

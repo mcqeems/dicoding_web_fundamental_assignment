@@ -49,15 +49,25 @@ class NotesList extends HTMLElement {
           flex-grow: 1;
         }
         .datetime {
-          font-size: 0.8em;
-          text-align: right;
-          color: #222831;
+          color: #222831 !important;
+          text-align: end;
+        }
+        .card-footer{
           margin-top: 15px;
+          font-size: 0.8em;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 5px;
+        }
+        .archived-info {
+          color: #222831 !important;
         }
         .empty-message {
           color: #393e46;
           text-align: center;
           width: 100%;
+          grid-column: 1 / -1;
         }
       </style>
     `;
@@ -73,18 +83,29 @@ class NotesList extends HTMLElement {
         noteElement.innerHTML = `
           <h3>${note.title}</h3>
           <p>${note.body}</p>
-          <p class="datetime">
+          <div class="card-footer">
+          <p class="archived-info">
+          <b>
+            Archived
+          </b>  
+          </p>
+           <p class="datetime">
             ${new Date(note.createdAt).toLocaleDateString('id-ID', {
               day: '2-digit',
               month: 'long',
               year: 'numeric',
             })}
           </p>
+          </div>
+         
         `;
         container.appendChild(noteElement);
       });
     } else {
-      container.innerHTML = `<p class="empty-message">Tidak ada catatan untuk ditampilkan. Silakan tambahkan catatan baru!</p>`;
+      container.innerHTML = `<div class="empty-message">
+            <p>Tidak ada catatan untuk ditampilkan. Silakan tambahkan catatan baru!</p>
+            </div>
+      `;
     }
 
     this.shadowRoot.appendChild(container);
