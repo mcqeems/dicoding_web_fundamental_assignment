@@ -1,7 +1,7 @@
 class NoteForm extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -129,29 +129,33 @@ class NoteForm extends HTMLElement {
   }
 
   addEventListeners() {
-    const form = this.shadowRoot.querySelector('.input-form');
-    const titleInput = this.shadowRoot.querySelector('#title-input');
-    const bodyInput = this.shadowRoot.querySelector('#body-input');
-    const titleError = this.shadowRoot.querySelector('#title-error');
-    const bodyError = this.shadowRoot.querySelector('#body-error');
+    const form = this.shadowRoot.querySelector(".input-form");
+    const titleInput = this.shadowRoot.querySelector("#title-input");
+    const bodyInput = this.shadowRoot.querySelector("#body-input");
+    const titleError = this.shadowRoot.querySelector("#title-error");
+    const bodyError = this.shadowRoot.querySelector("#body-error");
 
     const validateInput = (input, errorElement) => {
       if (input.validity.valueMissing) {
-        errorElement.textContent = 'Field ini harus diisi.';
+        errorElement.textContent = "Field ini harus diisi.";
         return false;
       } else if (input.validity.tooShort) {
         errorElement.textContent = `Minimal ${input.minLength} karakter.`;
         return false;
       } else {
-        errorElement.textContent = '';
+        errorElement.textContent = "";
         return true;
       }
     };
 
-    titleInput.addEventListener('input', () => validateInput(titleInput, titleError));
-    bodyInput.addEventListener('input', () => validateInput(bodyInput, bodyError));
+    titleInput.addEventListener("input", () =>
+      validateInput(titleInput, titleError),
+    );
+    bodyInput.addEventListener("input", () =>
+      validateInput(bodyInput, bodyError),
+    );
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener("submit", (event) => {
       event.preventDefault();
 
       const isTitleValid = validateInput(titleInput, titleError);
@@ -159,14 +163,14 @@ class NoteForm extends HTMLElement {
 
       if (isTitleValid && isBodyValid) {
         this.dispatchEvent(
-          new CustomEvent('submit', {
+          new CustomEvent("submit", {
             bubbles: true,
             composed: true,
             detail: {
               title: titleInput.value,
               body: bodyInput.value,
             },
-          })
+          }),
         );
         form.reset();
       }
@@ -174,4 +178,4 @@ class NoteForm extends HTMLElement {
   }
 }
 
-customElements.define('note-form', NoteForm);
+customElements.define("note-form", NoteForm);

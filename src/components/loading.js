@@ -1,7 +1,7 @@
 class Loading extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -73,4 +73,4 @@ class Loading extends HTMLElement {
   }
 }
 
-customElements.define('loading-spinner', Loading);
+customElements.define("loading-spinner", Loading);

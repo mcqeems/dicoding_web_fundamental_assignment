@@ -1,11 +1,11 @@
-import './components/app-bar.js';
-import './components/note-form.js';
-import './components/notes-list.js';
-import './components/loading.js';
-import './styles/style.css';
+import "./components/app-bar.js";
+import "./components/note-form.js";
+import "./components/notes-list.js";
+import "./components/loading.js";
+import "./styles/style.css";
 
-const notesList = document.querySelector('notes-list');
-const baseUrl = 'https://notes-api.dicoding.dev/v2';
+const notesList = document.querySelector("notes-list");
+const baseUrl = "https://notes-api.dicoding.dev/v2";
 let notesData = [];
 
 const fetchNotes = async () => {
@@ -14,15 +14,22 @@ const fetchNotes = async () => {
   try {
     const responseArchivePromise = fetch(`${baseUrl}/notes/archived`);
     const responseRegularPromise = fetch(`${baseUrl}/notes`);
-    const [responseArchive, responseRegular] = await Promise.all([responseArchivePromise, responseRegularPromise]);
+    const [responseArchive, responseRegular] = await Promise.all([
+      responseArchivePromise,
+      responseRegularPromise,
+    ]);
 
     const responseArchiveJson = await responseArchive.json();
     const responseRegularJson = await responseRegular.json();
-    const notesData = [...responseArchiveJson.data, ...responseRegularJson.data];
+    const notesData = [
+      ...responseArchiveJson.data,
+      ...responseRegularJson.data,
+    ];
 
     notesList.notes = notesData;
   } catch (error) {
     console.error(error);
+    alert(error);
     notesList.innerHTML = `<p style="text-align: center; color: red;">Gagal memuat catatan.</p>`;
   }
 };
@@ -30,9 +37,9 @@ export const renderNotes = () => {
   fetchNotes();
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const noteForm = document.querySelector('note-form');
-  const toggleButton = document.getElementById('notes-button');
+document.addEventListener("DOMContentLoaded", () => {
+  const noteForm = document.querySelector("note-form");
+  const toggleButton = document.getElementById("notes-button");
 
   let isFormOpen = false;
 
@@ -41,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function toggleForm() {
     isFormOpen = !isFormOpen;
-    noteForm.style.display = isFormOpen ? 'block' : 'none';
+    noteForm.style.display = isFormOpen ? "block" : "none";
     toggleButton.innerHTML = isFormOpen ? closeFormIcon : openFormIcon;
   }
 
-  toggleButton.addEventListener('click', toggleForm);
+  toggleButton.addEventListener("click", toggleForm);
 
-  noteForm.addEventListener('submit', (event) => {
+  noteForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const { title, body } = event.detail;
 
@@ -59,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const postNewNote = async () => {
       try {
         const options = {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(newNote),
         };
@@ -70,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderNotes();
         console.log(responseJson);
       } catch (error) {
+        alert(error);
         console.error(error);
       }
     };

@@ -105,11 +105,14 @@ class NotesList extends HTMLElement {
         noteElement.classList.add('notes-list-card');
         noteElement.id = note.id;
 
-        const formattedDate = new Date(note.createdAt).toLocaleDateString('id-ID', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        });
+        const formattedDate = new Date(note.createdAt).toLocaleDateString(
+          'id-ID',
+          {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+          }
+        );
 
         noteElement.innerHTML = `
           <div class="button-note">
@@ -128,6 +131,8 @@ class NotesList extends HTMLElement {
           </div>         
         `;
 
+        // ---- Handlers ----
+
         const deleteButton = noteElement.querySelector('.delete');
         const archiveButton = noteElement.querySelector('.archive');
         const unarchiveButton = noteElement.querySelector('.unarchive');
@@ -136,16 +141,19 @@ class NotesList extends HTMLElement {
           archiveButton.addEventListener('click', async () => {
             try {
               const options = { method: 'POST' };
-              const response = await fetch(`${baseUrl}notes/${note.id}/archive`, options);
+              const response = await fetch(
+                `${baseUrl}notes/${note.id}/archive`,
+                options
+              );
               const responseJson = await response.json();
 
               console.log(responseJson.message);
-              alert('Catatan berhasil disimpan!');
+              alert('Catatan berhasil diarsip!');
 
               renderNotes();
             } catch (error) {
               console.error('Gagal menyimpan catatan:', error);
-              alert('Gagal menyimpan catatan.');
+              alert('Gagal mengarsip catatan.');
             }
           });
         }
@@ -154,11 +162,14 @@ class NotesList extends HTMLElement {
           unarchiveButton.addEventListener('click', async () => {
             try {
               const options = { method: 'POST' };
-              const response = await fetch(`${baseUrl}notes/${note.id}/unarchive`, options);
+              const response = await fetch(
+                `${baseUrl}notes/${note.id}/unarchive`,
+                options
+              );
               const responseJson = await response.json();
 
               console.log(responseJson.message);
-              alert('Catatan berhasil dilepas dari penyimpanan!');
+              alert('Catatan berhasil dilepas dari arsip!');
 
               renderNotes();
             } catch (error) {

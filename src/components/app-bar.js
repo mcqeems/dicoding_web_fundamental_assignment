@@ -1,12 +1,12 @@
 class AppBar extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
-    this.title = this.getAttribute('title') || 'Notes App';
-    this.subtitle = this.getAttribute('subtitle') || 'Your personal notes';
+    this.title = this.getAttribute("title") || "Notes App";
+    this.subtitle = this.getAttribute("subtitle") || "Your personal notes";
     this.render();
   }
 
@@ -45,7 +45,7 @@ class AppBar extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['title', 'subtitle'];
+    return ["title", "subtitle"];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -56,4 +56,4 @@ class AppBar extends HTMLElement {
   }
 }
 
-customElements.define('app-bar', AppBar);
+customElements.define("app-bar", AppBar);
