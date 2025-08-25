@@ -2,15 +2,15 @@ import "./components/app-bar.js";
 import "./components/note-form.js";
 import "./components/notes-list.js";
 import "./components/loading.js";
+import "./components/message-box.js";
 import "./styles/style.css";
 
 const notesList = document.querySelector("notes-list");
+const messageBox = document.querySelector("message-box");
 const baseUrl = "https://notes-api.dicoding.dev/v2";
-let notesData = [];
 
 const fetchNotes = async () => {
   notesList.showLoading();
-
   try {
     const responseArchivePromise = fetch(`${baseUrl}/notes/archived`);
     const responseRegularPromise = fetch(`${baseUrl}/notes`);
@@ -18,18 +18,22 @@ const fetchNotes = async () => {
       responseArchivePromise,
       responseRegularPromise,
     ]);
-
     const responseArchiveJson = await responseArchive.json();
     const responseRegularJson = await responseRegular.json();
+    if (
+      responseArchiveJson.status !== "success" ||
+      responseRegularJson.status !== "success"
+    ) {
+      throw new Error("Gagal memuat catatan.");
+    }
     const notesData = [
       ...responseArchiveJson.data,
       ...responseRegularJson.data,
     ];
-
     notesList.notes = notesData;
   } catch (error) {
     console.error(error);
-    alert(error);
+    messageBox.showMessage(error.message, "error");
     notesList.innerHTML = `<p style="text-align: center; color: red;">Gagal memuat catatan.</p>`;
   }
 };
@@ -40,7 +44,6 @@ export const renderNotes = () => {
 document.addEventListener("DOMContentLoaded", () => {
   const noteForm = document.querySelector("note-form");
   const toggleButton = document.getElementById("notes-button");
-
   let isFormOpen = false;
 
   const openFormIcon = `<svg width="30px" height="30px" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none"><g stroke="#222831" stroke-linecap="round" stroke-linejoin="round" stroke-width="12"><path d="M55 139.591 61.173 171l26.432-17.816L136 35.594 103.394 22 55 139.591ZM22 42h72m40 0h36M22 78h57m41 0h50M22 114h41m41 0h66M22 150h34m34 0h32"/></g></svg>`;
@@ -54,35 +57,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toggleButton.addEventListener("click", toggleForm);
 
-  noteForm.addEventListener("submit", (event) => {
+  noteForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const { title, body } = event.detail;
+    const newNote = { title, body };
 
-    const newNote = {
-      title,
-      body,
-    };
-
-    const postNewNote = async () => {
-      try {
-        const options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newNote),
-        };
-        const response = await fetch(`${baseUrl}/notes`, options);
-        const responseJson = await response.json();
-        renderNotes();
-        console.log(responseJson);
-      } catch (error) {
-        alert(error);
-        console.error(error);
+    messageBox.showLoading();
+    try {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newNote),
+      };
+      const response = await fetch(`${baseUrl}/notes`, options);
+      const responseJson = await response.json();
+      if (responseJson.status !== "success") {
+        throw new Error(responseJson.message);
       }
-    };
-
-    postNewNote();
+      messageBox.showMessage("Catatan berhasil ditambahkan!");
+      renderNotes();
+    } catch (error) {
+      messageBox.showMessage(error.message, "error");
+      renderNotes();
+    }
   });
 
   renderNotes();

@@ -1,5 +1,7 @@
 import { renderNotes } from "../index.js";
-import { animate, scroll } from "motion";
+import { animate, easeIn, easeOut, hover } from "motion";
+
+const messageBox = document.querySelector("message-box");
 
 class NotesList extends HTMLElement {
   constructor() {
@@ -138,63 +140,57 @@ class NotesList extends HTMLElement {
         const archiveButton = noteElement.querySelector(".archive");
         const unarchiveButton = noteElement.querySelector(".unarchive");
 
-        if (archiveButton) {
-          archiveButton.addEventListener("click", async () => {
-            try {
-              const options = { method: "POST" };
-              const response = await fetch(
-                `${baseUrl}notes/${note.id}/archive`,
-                options
-              );
-              const responseJson = await response.json();
-
-              console.log(responseJson.message);
-              alert("Catatan berhasil diarsip!");
-
-              renderNotes();
-            } catch (error) {
-              console.error("Gagal menyimpan catatan:", error);
-              alert("Gagal mengarsip catatan.");
+        const handleAction = async (
+          url,
+          options,
+          successMessage,
+          errorMessage
+        ) => {
+          messageBox.showLoading();
+          try {
+            const response = await fetch(url, options);
+            const responseJson = await response.json();
+            if (responseJson.status !== "success") {
+              throw new Error(responseJson.message);
             }
-          });
+            messageBox.showMessage(successMessage);
+            renderNotes();
+          } catch (error) {
+            messageBox.showMessage(errorMessage, "error");
+            renderNotes();
+          }
+        };
+
+        if (archiveButton) {
+          archiveButton.addEventListener("click", () =>
+            handleAction(
+              `${baseUrl}notes/${note.id}/archive`,
+              { method: "POST" },
+              "Catatan berhasil diarsip!",
+              "Gagal mengarsip catatan."
+            )
+          );
         }
 
         if (unarchiveButton) {
-          unarchiveButton.addEventListener("click", async () => {
-            try {
-              const options = { method: "POST" };
-              const response = await fetch(
-                `${baseUrl}notes/${note.id}/unarchive`,
-                options
-              );
-              const responseJson = await response.json();
-
-              console.log(responseJson.message);
-              alert("Catatan berhasil dilepas dari arsip!");
-
-              renderNotes();
-            } catch (error) {
-              console.error("Gagal:", error);
-              alert("Gagal");
-            }
-          });
+          unarchiveButton.addEventListener("click", () =>
+            handleAction(
+              `${baseUrl}notes/${note.id}/unarchive`,
+              { method: "POST" },
+              "Catatan berhasil dilepas dari arsip!",
+              "Gagal melepas dari arsip."
+            )
+          );
         }
 
-        deleteButton.addEventListener("click", async () => {
-          try {
-            const options = { method: "DELETE" };
-            const response = await fetch(`${baseUrl}notes/${note.id}`, options);
-            const responseJson = await response.json();
-
-            console.log(responseJson.message);
-            alert("Catatan berhasil dihapus!");
-
-            renderNotes();
-          } catch (error) {
-            console.error("Gagal menghapus catatan:", error);
-            alert("Gagal menghapus catatan.");
-          }
-        });
+        deleteButton.addEventListener("click", () =>
+          handleAction(
+            `${baseUrl}notes/${note.id}`,
+            { method: "DELETE" },
+            "Catatan berhasil dihapus!",
+            "Gagal menghapus catatan."
+          )
+        );
 
         container.appendChild(noteElement);
       });
@@ -221,6 +217,21 @@ class NotesList extends HTMLElement {
           duration: 0.5,
         }
       );
+
+      hover(notesCards, (element) => {
+        animate(
+          element,
+          { scale: 1.1 },
+          { scale: { ease: "easeOut", duration: "0.1" } }
+        );
+
+        return () =>
+          animate(
+            element,
+            { scale: 1 },
+            { scale: { ease: "easeOut", duration: "0.1" } }
+          );
+      });
     }
   }
 }
